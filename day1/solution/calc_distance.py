@@ -11,7 +11,7 @@ def create_lists(input: str) -> tuple[list[int], list[int]]:
 
     return (left_list, right_list)
 
-def calc_distance(input: str) -> int:
+def exec(input: str) -> int:
     (l_list, r_list) = create_lists(input)
     l_list.sort()
     r_list.sort()

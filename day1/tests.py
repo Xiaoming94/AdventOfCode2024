@@ -1,6 +1,6 @@
 import unittest
 
-from . import solution
+from .solution import calc_distance
 class Day1Tests(unittest.TestCase):
     def test_problem1(self):
 
@@ -11,5 +11,5 @@ class Day1Tests(unittest.TestCase):
                  "3  9\n"
                  "3  3")
 
-        result = solution.calc_distance(input)
+        result = calc_distance.exec(input)
         self.assertEqual(result, 11)
