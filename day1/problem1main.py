@@ -1,9 +1,10 @@
 import sys
 
 from solution import calc_distance
-input = ""
-for line in sys.stdin:
-    input += line
+sys.path.insert(1, "../utils/python/")
+
+from inputreader import read_input
+input = read_input()
 
 print("The input is:")
 print(input)
