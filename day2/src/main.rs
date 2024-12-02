@@ -1,7 +1,20 @@
 mod solutions;
 
+use std::io::{self, BufRead};
+
 fn main() {
-    println!("Hello, world!");
+    let stdin = io::stdin();
+    let input = stdin
+        .lock()
+        .lines()
+        .fold("".to_string(), move |input, line| {
+            input + line.unwrap().as_str() + "\n"
+        });
+    println!("input is: {input}");
+    println!(
+        "Result problem1: {}",
+        solutions::find_safe_reports(input.as_str())
+    );
 }
 
 #[cfg(test)]
