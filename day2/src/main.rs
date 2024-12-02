@@ -15,6 +15,11 @@ fn main() {
         "Result problem1: {}",
         solutions::find_safe_reports(input.as_str())
     );
+
+    println!(
+        "Result problem2: {}",
+        solutions::find_safe_reports_with_dampener(input.as_str())
+    );
 }
 
 #[cfg(test)]
