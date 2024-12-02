@@ -1,7 +1,7 @@
 type Report = Vec<i32>;
 
 enum ReportSafety {
-    Unsafe,
+    Unsafe(Report),
     Safe,
 }
 
@@ -51,7 +51,7 @@ fn check_safety(report: Report) -> ReportSafety {
             || (!is_ascending && num > elem)
         {
             println!("report: {:?} is Unsafe", report);
-            return ReportSafety::Unsafe;
+            return ReportSafety::Unsafe(report);
         }
 
         elem = num
@@ -60,6 +60,18 @@ fn check_safety(report: Report) -> ReportSafety {
     println!("report: {:?} is Safe", report);
 
     return ReportSafety::Safe;
+}
+
+fn sanitize_report(report: Report) -> ReportSafety {
+    println!("sanitizing: {:?}", report);
+    for i in 0..report.len() {
+        let mut report_clone = report.clone();
+        report_clone.remove(i);
+        if check_safety(report_clone).is_safe() {
+            return ReportSafety::Safe;
+        }
+    }
+    ReportSafety::Unsafe(report)
 }
 
 pub(crate) fn find_safe_reports(input: &str) -> u32 {
@@ -72,5 +84,17 @@ pub(crate) fn find_safe_reports(input: &str) -> u32 {
 }
 
 pub(crate) fn find_safe_reports_with_dampener(input: &str) -> u32 {
-    42
+    input
+        .lines()
+        .map(create_report)
+        .map(check_safety)
+        .map(|report_wrapped| {
+            if let ReportSafety::Unsafe(report) = report_wrapped {
+                sanitize_report(report)
+            } else {
+                report_wrapped
+            }
+        })
+        .filter(|report| report.is_safe())
+        .count() as u32
 }
