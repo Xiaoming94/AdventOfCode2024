@@ -32,4 +32,9 @@ mod day2tests {
         let result = solutions::find_safe_reports(INPUT);
         assert_that!(result, eq(2));
     }
+
+    fn verify_problem2solution() {
+        let result = solutions::find_safe_reports_with_dampener(INPUT);
+        assert_that!(result, eq(4));
+    }
 }

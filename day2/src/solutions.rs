@@ -70,3 +70,7 @@ pub(crate) fn find_safe_reports(input: &str) -> u32 {
         .filter(|report| report.is_safe())
         .count() as u32
 }
+
+pub(crate) fn find_safe_reports_with_dampener(input: &str) -> u32 {
+    42
+}
