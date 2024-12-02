@@ -2,13 +2,13 @@ type Report = Vec<i32>;
 
 enum ReportSafety {
     Unsafe,
-    Safe(Report),
+    Safe,
 }
 
 impl ReportSafety {
     fn is_safe(&self) -> bool {
         use ReportSafety::*;
-        if let Safe(_) = *self {
+        if let Safe = *self {
             true
         } else {
             false
@@ -59,7 +59,7 @@ fn check_safety(report: Report) -> ReportSafety {
 
     println!("report: {:?} is Safe", report);
 
-    return ReportSafety::Safe(report);
+    return ReportSafety::Safe;
 }
 
 pub(crate) fn find_safe_reports(input: &str) -> u32 {
