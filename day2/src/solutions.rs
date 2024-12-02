@@ -32,7 +32,7 @@ pub(crate) fn find_safe_reports(input: &str) -> u32 {
         fn test_is_ascending(report: &Report) -> (bool, &i32) {
             if let Some(first) = report.get(0) {
                 if let Some(second) = report.get(1) {
-                    (first < second, second)
+                    (first < second, first)
                 } else {
                     panic!("invalid input");
                 }
@@ -47,7 +47,7 @@ pub(crate) fn find_safe_reports(input: &str) -> u32 {
             let diff = (first - second).abs();
             diff < 1 || diff > 3
         }
-        for num in &report[2..] {
+        for num in &report[1..] {
             if (unacceptable_diff(*num, *elem) || is_ascending && num < elem)
                 || (!is_ascending && num > elem)
             {
