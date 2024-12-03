@@ -4,14 +4,26 @@
 
 plugins {
     id("buildlogic.java-application-conventions")
+    kotlin("jvm") version "2.1.0"
 }
 
 dependencies {
     implementation("org.apache.commons:commons-text")
     implementation(project(":utilities"))
+    testImplementation(platform("org.junit:junit-bom:5.11.3"))
+    testImplementation(kotlin("test"))
+	testImplementation("org.junit.jupiter:junit-jupiter")
+	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 application {
     // Define the main class for the application.
     mainClass = "org.example.app.App"
+}
+
+tasks.test {
+    useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
 }
