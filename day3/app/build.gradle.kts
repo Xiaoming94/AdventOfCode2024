@@ -18,12 +18,14 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = "org.example.app.App"
+    mainClass = "org.adventofcode.day3.Main"
 }
 
 tasks.test {
     useJUnitPlatform()
-    testLogging { 
-        events("passed", "skipped", "failed", "STANDARD_OUT", "STANDARD_ERROR")
-    }
+    testLogging { events("passed", "skipped", "failed", "STANDARD_OUT", "STANDARD_ERROR") }
+}
+
+tasks.run.configure {
+    standardInput = System.`in`
 }
