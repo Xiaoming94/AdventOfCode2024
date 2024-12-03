@@ -17,7 +17,8 @@ Each day is solved using a randomized programming lanugages among one of followi
 * Elixir
 
 ## Progress so far:
-| Date | language |
+| Day | language |
 | ---- | -------- |
 | 1    | python   |
 | 2    | rust     |
+| 3    | kotlin   |
