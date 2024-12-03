@@ -6,16 +6,15 @@ class Main {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            println("Running")
             var input = String()
             val sc = Scanner(System.`in`)
 
-            var line = ""
             do {
-                line = sc.nextLine()
-                input += line
+                val line = sc.nextLine()
+                input += (line + "\n")
             } while (sc.hasNext())
-            println("Done" + input)
+            println("Input is:\n" + input)
+            println("Problem1 Solution: " + Solution.sumMulInstructions(input))
         }
     }
 }
