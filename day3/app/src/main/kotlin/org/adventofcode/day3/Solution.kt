@@ -5,7 +5,12 @@ import java.util.regex.Pattern
 class Solution {
     companion object {
         fun sumMulInstructions(input: String): Int {
-            println(input)
+
+            val instructionList: List<MulInstruction> = findMulInstructions(input)
+            return instructionList.map { instruction -> instruction.execute() }.sum()
+        }
+
+        fun findMulInstructions(input: String): List<MulInstruction> {
             val instructionPattern: Pattern = Pattern.compile("mul\\([0-9]+,[0-9]+\\)")
             val matches = instructionPattern.matcher(input)
             var instructionList: List<MulInstruction> = mutableListOf()
@@ -25,7 +30,7 @@ class Solution {
                 }
             }
 
-            return instructionList.map { instruction -> instruction.execute() }.sum()
+            return instructionList
         }
     }
 }
