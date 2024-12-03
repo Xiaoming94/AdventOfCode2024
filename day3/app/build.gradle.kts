@@ -12,8 +12,8 @@ dependencies {
     implementation(project(":utilities"))
     testImplementation(platform("org.junit:junit-bom:5.11.3"))
     testImplementation(kotlin("test"))
-	testImplementation("org.junit.jupiter:junit-jupiter")
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 application {
@@ -23,7 +23,7 @@ application {
 
 tasks.test {
     useJUnitPlatform()
-    testLogging {
-        events("passed", "skipped", "failed")
+    testLogging { 
+        events("passed", "skipped", "failed", "STANDARD_OUT", "STANDARD_ERROR")
     }
 }
