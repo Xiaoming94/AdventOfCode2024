@@ -10,7 +10,29 @@ class Solution {
             return instructionList.map { instruction -> instruction.execute() }.sum()
         }
 
-        fun findMulInstructions(input: String): List<MulInstruction> {
+        fun sumMulInstructionsWithDos(input: String): Int {
+
+            val dontPattern: Pattern = Pattern.compile("don't\\(\\)")
+            val subInstructions: List<String> = input.split(dontPattern)
+            var instructionList: List<MulInstruction> = findMulInstructions(subInstructions[0])
+            val doPattern: Pattern = Pattern.compile("do\\(\\)")
+
+            for (i in (1 ..< subInstructions.size)) {
+                println("outerloop")
+                println(subInstructions[i])
+                val enabled = subInstructions[i].split(doPattern)
+                for (j in (1 ..< enabled.size)) {
+                    println("Innerloop")
+                    println(enabled[j])
+                    instructionList += findMulInstructions(enabled[j])
+                }
+            }
+            val ret = instructionList.map { instruction -> instruction.execute() }.sum()
+            print(ret)
+            return ret
+        }
+
+        private fun findMulInstructions(input: String): List<MulInstruction> {
             val instructionPattern: Pattern = Pattern.compile("mul\\([0-9]+,[0-9]+\\)")
             val matches = instructionPattern.matcher(input)
             var instructionList: List<MulInstruction> = mutableListOf()
