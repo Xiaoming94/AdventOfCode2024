@@ -18,18 +18,12 @@ class Solution {
             val doPattern: Pattern = Pattern.compile("do\\(\\)")
 
             for (i in (1 ..< subInstructions.size)) {
-                println("outerloop")
-                println(subInstructions[i])
                 val enabled = subInstructions[i].split(doPattern)
                 for (j in (1 ..< enabled.size)) {
-                    println("Innerloop")
-                    println(enabled[j])
                     instructionList += findMulInstructions(enabled[j])
                 }
             }
-            val ret = instructionList.map { instruction -> instruction.execute() }.sum()
-            print(ret)
-            return ret
+            return instructionList.map { instruction -> instruction.execute() }.sum()
         }
 
         private fun findMulInstructions(input: String): List<MulInstruction> {
