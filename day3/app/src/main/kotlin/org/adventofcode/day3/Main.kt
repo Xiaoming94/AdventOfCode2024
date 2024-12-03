@@ -15,6 +15,7 @@ class Main {
             } while (sc.hasNext())
             println("Input is:\n" + input)
             println("Problem1 Solution: " + Solution.sumMulInstructions(input))
+            println("Problem2 Solution: " + Solution.sumMulInstructionsWithDos(input))
         }
     }
 }
