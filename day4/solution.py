@@ -23,6 +23,9 @@ def count_xmas(input: str) -> int:
 
     return xmas_count
 
+def count_cross_mas(input: str) -> int:
+    return 0
+
 def get_word_in_direction(
         input: list[list[str]],
         indices: list[tuple[ int,int ]],
