@@ -1,14 +1,14 @@
 def count_xmas(input: str) -> int:
     input_as_list = [list(line) for line in input.splitlines()]
 
-    direction_indices = [[(0,1),(0,2),(0,3)], # Left
-                         [(0,-1),(0,-2),(0,-3)], # right
-                         [(1,0),(2,0),(3,0)], # Down
-                         [(-1,0),(-2,0),(-3,0)], # Up
-                         [(1,1),(2,2),(3,3)], # Down Left
-                         [(1,-1),(2,-2),(3,-3)], # Down Right
-                         [(-1,1),(-2,2),(-3,3)], #Up Left
-                         [(-1,-1),(-2,-2),(-3,-3)], #Up Right
+    direction_indices = [[(0,1),(0,2),(0,3)],       # Left
+                         [(0,-1),(0,-2),(0,-3)],    # right
+                         [(1,0),(2,0),(3,0)],       # Down
+                         [(-1,0),(-2,0),(-3,0)],    # Up
+                         [(1,1),(2,2),(3,3)],       # Down Left
+                         [(1,-1),(2,-2),(3,-3)],    # Down Right
+                         [(-1,1),(-2,2),(-3,3)],    # Up Left
+                         [(-1,-1),(-2,-2),(-3,-3)], # Up Right
                         ]
 
     xmas_count = 0
