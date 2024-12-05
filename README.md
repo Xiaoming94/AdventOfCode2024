@@ -23,3 +23,4 @@ Each day is solved using a randomized programming lanugages among one of followi
 | 2    | rust     |
 | 3    | kotlin   |
 | 4    | Python   |
+| 5    | C++      |
