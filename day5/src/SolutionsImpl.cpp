@@ -64,13 +64,10 @@ namespace
     for (auto i = 0; i < print.size(); i++) {
       if (rules.contains(print[i])) {
         const auto pagesBefore = rules.at(print[i]);
-        printPage(print);
         for (auto j = i; j >= 0; j--) {
           if (std::find(pagesBefore.begin(), pagesBefore.end(), print[j])
               != pagesBefore.end())
           {
-            std::cout << "Found page: " << "\n";
-            printPage(print);
             return false;
           }
         }
@@ -105,7 +102,7 @@ namespace solution
 
     std::stringstream lineStream(linePrints);
     std::string print;
-    uint32_t sumMidPageNumbers {0u};
+    uint32_t sumMidPageNumbers {0U};
     while (std::getline(lineStream, print, '\n')) {
       const auto currentUpdatePrint = convertToPrintContainer(print);
       if (isPrintValid(rules, currentUpdatePrint)) {
