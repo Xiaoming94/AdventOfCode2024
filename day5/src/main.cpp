@@ -14,4 +14,7 @@ int main()
   std::cout << "Current Puzzle Input:\n" << input << std::endl;
   std::cout << "Problem1 solution: " << solution::sumMiddlePageNumbers(input)
             << std::endl;
+
+  std::cout << "Problem2 solution: "
+            << solution::fixBadPageSumMiddleNumbers(input) << std::endl;
 }
