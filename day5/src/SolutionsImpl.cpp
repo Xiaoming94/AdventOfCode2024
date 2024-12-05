@@ -101,7 +101,6 @@ namespace solution
   {
     const auto& [orderingRuleStr, linePrints] = separateRuleFromInput(input);
     const Rules rules = createOrderingRules(orderingRuleStr);
-    Prints_t validPrints;
 
     std::stringstream lineStream(linePrints);
     std::string print;
@@ -114,4 +113,10 @@ namespace solution
     }
     return sumMidPageNumbers;
   }
+
+  auto fixBadPageSumMiddleNumbers(const std::string& input) -> uint32_t
+  {
+    return 42;
+  }
+
 }  // namespace solution
