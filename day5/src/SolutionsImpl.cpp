@@ -92,6 +92,9 @@ namespace
 
     return pageVec;
   }
+
+  void correctPrint(const Rules& rules, Prints_t& print) {}
+
 }  // namespace
 
 namespace solution
@@ -116,7 +119,20 @@ namespace solution
 
   auto fixBadPageSumMiddleNumbers(const std::string& input) -> uint32_t
   {
-    return 42;
+    const auto& [orderingRuleStr, linePrints] = separateRuleFromInput(input);
+    const Rules rules = createOrderingRules(orderingRuleStr);
+
+    std::stringstream lineStream(linePrints);
+    std::string print;
+    uint32_t sumMidPageNumbers {0U};
+    while (std::getline(lineStream, print, '\n')) {
+      auto currentUpdatePrint = convertToPrintContainer(print);
+      if (not isPrintValid(rules, currentUpdatePrint)) {
+        correctPrint(rules, currentUpdatePrint);
+        sumMidPageNumbers += currentUpdatePrint[currentUpdatePrint.size() / 2];
+      }
+    }
+    return sumMidPageNumbers;
   }
 
 }  // namespace solution
