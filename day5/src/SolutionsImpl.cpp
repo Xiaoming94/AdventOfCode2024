@@ -93,7 +93,28 @@ namespace
     return pageVec;
   }
 
-  void correctPrint(const Rules& rules, Prints_t& print) {}
+  void correctPrint(const Rules& rules, Prints_t& print)
+  {
+    const auto sortingPredicate = [&rules](const auto lhs, const auto rhs)
+    {
+      if (rules.contains(lhs)) {
+        const auto afterLhs = rules.at(lhs);
+        return std::any_of(afterLhs.begin(),
+                           afterLhs.end(),
+                           [rhs](const auto val) { return val == rhs; });
+      }
+      if (rules.contains(rhs)) {
+        const auto afterRhs = rules.at(rhs);
+        return std::all_of(afterRhs.begin(),
+                           afterRhs.end(),
+                           [lhs](const auto val) { return val != lhs; });
+      }
+
+      return false;
+    };
+
+    std::sort(print.begin(), print.end(), sortingPredicate);
+  }
 
 }  // namespace
 
