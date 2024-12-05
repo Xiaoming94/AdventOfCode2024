@@ -39,6 +39,7 @@ namespace
     while (std::getline(orderingRuleSS, line, '\n')) {
       const std::string delimiter = "|";
       auto pos = line.find(delimiter);
+      assert(pos != std::string::npos && "Not in valid rule format");
       const auto pageBefore =
           static_cast<uint32_t>(std::stoi(line.substr(0, pos)));
       const auto pageAfter = static_cast<uint32_t>(
@@ -65,8 +66,10 @@ namespace
       if (rules.contains(print[i])) {
         const auto pagesBefore = rules.at(print[i]);
         for (auto j = i; j >= 0; j--) {
-          if (std::find(pagesBefore.begin(), pagesBefore.end(), print[j])
-              != pagesBefore.end())
+          if (std::any_of(pagesBefore.begin(),
+                          pagesBefore.end(),
+                          [j, &print](const auto elem)
+                          { return elem == print[j]; }))
           {
             return false;
           }
