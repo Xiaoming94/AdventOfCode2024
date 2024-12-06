@@ -1,27 +1,26 @@
 module Solution
   class RicochetGuardGame
     def initialize(gamemap_string)
-      @nextdirection = {
-        up: :right,
-        right: :down,
-        down: :left,
-        left: :up
-      }
-
-      gamelines_arr = gamemap_string.split("\n")
+      @nextdirection = { up: :right, right: :down, down: :left, left: :up }
       @playerpos = [0, 0]
       @gamemap = {}
+
+      gamelines_arr = gamemap_string.split("\n")
       @playerdir = :up
       (0...gamelines_arr.size).zip(gamelines_arr).each do |y, line|
-        linechars = line.split('')
-        (0...linechars.size).zip(linechars).each do |x, c|
-          current_pos = [x, y]
-          @gamemap.merge!({ current_pos => :box }) if c == '#'
-          @gamemap.merge!({ current_pos => :dot }) if c == '.'
-          if c == '^'
-            @playerpos = current_pos
-            @gamemap.merge!({ current_pos => :x })
-          end
+        parse_line(line, y)
+      end
+    end
+
+    def parse_line(line, y_pos)
+      linechars = line.split('')
+      (0...linechars.size).zip(linechars).each do |x_pos, c|
+        current_pos = [x_pos, y_pos]
+        @gamemap.merge!({ current_pos => :box }) if c == '#'
+        @gamemap.merge!({ current_pos => :dot }) if c == '.'
+        if c == '^'
+          @playerpos = current_pos
+          @gamemap.merge!({ current_pos => :x })
         end
       end
     end
