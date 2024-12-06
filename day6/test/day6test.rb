@@ -17,7 +17,7 @@ class Day6Tests < Minitest::Test
              '......#...'
   end
 
-  def test_framework
+  def test_problem1solution
     my_value = Solution.count_guard_steps(@input)
     assert_equal 41, my_value
   end

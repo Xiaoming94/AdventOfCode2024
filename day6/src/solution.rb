@@ -4,17 +4,16 @@ module Solution
       @nextdirection = { up: :right, right: :down, down: :left, left: :up }
       @playerpos = [0, 0]
       @gamemap = {}
+      @playerdir = :up
 
       gamelines_arr = gamemap_string.split("\n")
-      @playerdir = :up
       (0...gamelines_arr.size).zip(gamelines_arr).each do |y, line|
         parse_line(line, y)
       end
     end
 
     def parse_line(line, y_pos)
-      linechars = line.split('')
-      (0...linechars.size).zip(linechars).each do |x_pos, c|
+      (0...line.length).zip(line.split('')).each do |x_pos, c|
         current_pos = [x_pos, y_pos]
         @gamemap.merge!({ current_pos => :box }) if c == '#'
         @gamemap.merge!({ current_pos => :dot }) if c == '.'
