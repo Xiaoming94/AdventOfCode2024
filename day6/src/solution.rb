@@ -1,8 +1,7 @@
 module Solution
-  def my_const_value()
-    puts "Hello"
-    42
+  def count_guard_steps(input)
+    puts input
   end
 
-  module_function :my_const_value
+  module_function :count_guard_steps
 end
