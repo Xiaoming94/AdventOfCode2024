@@ -1,7 +1,8 @@
 use std::collections::VecDeque;
 
-type Operands = VecDeque<u32>;
-type Equation = (u32, Operands);
+type RhsType = u64;
+type Operands = VecDeque<RhsType>;
+type Equation = (RhsType, Operands);
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 enum Evaluation {
@@ -11,10 +12,10 @@ enum Evaluation {
 
 fn create_equation(line: &str) -> Equation {
     if let Some((lhs, rhs)) = line.split_once(':') {
-        let lhs_out: u32 = lhs.parse().unwrap();
-        let operands: VecDeque<u32> = rhs
+        let lhs_out: RhsType = lhs.parse().unwrap();
+        let operands: Operands = rhs
             .split_whitespace()
-            .map(|num| num.parse::<u32>().unwrap())
+            .map(|num| num.parse::<RhsType>().unwrap())
             .collect();
 
         return (lhs_out, operands);
@@ -25,7 +26,7 @@ fn create_equation(line: &str) -> Equation {
 
 fn try_evaluate(expression: Equation) -> Evaluation {
     let (lhs, mut rhs_ops) = expression;
-    fn try_evaluate_(lhs: u32, current_val: u32, mut operands: Operands) -> Evaluation {
+    fn try_evaluate_(lhs: RhsType, current_val: RhsType, mut operands: Operands) -> Evaluation {
         if operands.is_empty() {
             return if current_val == lhs {
                 Evaluation::Valid
@@ -49,7 +50,7 @@ fn try_evaluate(expression: Equation) -> Evaluation {
     return try_evaluate_(lhs, first_op, rhs_ops.clone());
 }
 
-pub(crate) fn find_valid_equations(input: &str) -> u32 {
+pub(crate) fn find_valid_equations(input: &str) -> RhsType {
     let equations: Vec<Equation> = input.lines().map(create_equation).collect();
 
     equations
