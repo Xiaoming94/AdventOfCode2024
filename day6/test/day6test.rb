@@ -18,7 +18,12 @@ class Day6Tests < Minitest::Test
   end
 
   def test_problem1solution
-    my_value = Solution.count_guard_steps(@input)
-    assert_equal 41, my_value
+    result = Solution.count_guard_steps(@input)
+    assert_equal 41, result
+  end
+
+  def test_problem2solution
+    result = Solution.find_possible_cycles(@input)
+    assert_equal 6, result
   end
 end

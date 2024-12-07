@@ -68,5 +68,10 @@ module Solution
     game.calc_xs
   end
 
-  module_function :count_guard_steps
+  def find_possible_cycles(input)
+    puts input
+    42
+  end
+
+  module_function :count_guard_steps, :find_possible_cycles
 end
