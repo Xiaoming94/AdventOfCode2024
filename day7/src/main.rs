@@ -9,6 +9,11 @@ fn main() {
         "Solution for problem1: {}",
         solution::find_valid_equations(input.as_str())
     );
+
+    println!(
+        "Solution for problem2: {}",
+        solution::find_valid_equations_concat(input.as_str())
+    );
 }
 
 #[cfg(test)]
