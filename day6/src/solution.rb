@@ -1,8 +1,18 @@
 module Solution
   Pos = Struct.new(:x, :y)
+
+  def self.nextdirection(dir)
+    nextdirection = {
+      up: :right,
+      right: :down,
+      down: :left,
+      left: :up
+    }
+    nextdirection[dir]
+  end
+
   class RicochetGuardGame
     def initialize(gamemap_string)
-      @nextdirection = { up: :right, right: :down, down: :left, left: :up }
       @playerpos = Pos.new(0, 0)
       @gamemap = {}
       @playerdir = :up
@@ -51,7 +61,7 @@ module Solution
       if @gamemap.key?(next_step) == false
         :finished
       else
-        @playerdir = @nextdirection[@playerdir] if @gamemap[next_step] == :box
+        @playerdir = Solution.nextdirection(@playerdir) if @gamemap[next_step] == :box
         :unfinished
       end
     end
