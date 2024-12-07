@@ -1,3 +1,5 @@
+require 'ostruct'
+
 module Solution
   Pos = Struct.new(:x, :y)
 
@@ -12,7 +14,7 @@ module Solution
   end
 
   class RicochetGuardGame
-    attr_reader(:guard)
+    attr_reader(:guard, :map)
 
     def initialize(gamemap_string)
       @map = GameMap.new(gamemap_string)
@@ -26,9 +28,16 @@ module Solution
     def check_game_state
       @guard.check_next_step
     end
+
+    def reset_with_map(map)
+      @guard.map = map
+      @guard.reset_guard
+    end
   end
 
   class Guard
+    attr_accessor(:map, :finishstate)
+
     def initialize(map, starting_pos)
       @map = map
       @starting_pos = starting_pos
@@ -39,6 +48,7 @@ module Solution
       @current_pos = @starting_pos.clone
       @guard_dir = :up
       @steps = 0
+      @boxes = {}
     end
 
     def check_next_step
@@ -46,10 +56,36 @@ module Solution
       next_step = next_pos(current_x, current_y)
       if @map.key?(next_step) == false
         :finished
+      elsif @map[next_step] == :box
+        @guard_dir = Solution.nextdirection(@guard_dir)
+        check_cycle(next_step)
       else
-        @guard_dir = Solution.nextdirection(@guard_dir) if @map[next_step] == :box
         :unfinished
       end
+    end
+
+    def check_cycle(box_pos)
+      if @boxes.key?(box_pos)
+        steps_at_box = @boxes[box_pos]
+        if cyclic(steps_at_box)
+          :cycle
+        else
+          steps_at_box.push(@steps)
+          @boxes[box_pos] = steps_at_box
+          :unfinished
+        end
+      else
+        @boxes.merge!({ box_pos => [@steps] })
+        :unfinished
+      end
+    end
+
+    def cyclic(steps_at_box)
+      return false if steps_at_box.length < 2
+
+      (second_last, last) = steps_at_box.last(2)
+      diff_current = @steps - last
+      diff_current == last - second_last
     end
 
     def walk_forward
@@ -108,6 +144,12 @@ module Solution
       end
       Pos.new(0, 0)
     end
+
+    def with_new_box_at(pos)
+      new_map = @map.clone
+      new_map[pos] = :box
+      new_map
+    end
   end
 
   def count_guard_steps(input)
@@ -117,8 +159,19 @@ module Solution
   end
 
   def find_possible_cycles(input)
-    puts input
-    42
+    game = RicochetGuardGame.new(input)
+    possible_box = 0
+    game.map.map.each_key do |pos|
+      game.reset_with_map(game.map.with_new_box_at(pos))
+      game_state = :unfinished
+      while game_state == :unfinished
+        game.next_step
+        game_state = game.check_game_state
+      end
+      possible_box += 1 if game_state == :cycle
+    end
+
+    possible_box
   end
 
   module_function :count_guard_steps, :find_possible_cycles
