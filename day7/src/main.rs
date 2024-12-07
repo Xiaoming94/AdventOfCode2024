@@ -30,4 +30,10 @@ mod tests {
         let results = solution::find_valid_equations(INPUT);
         assert_that!(results, eq(3749));
     }
+
+    #[test]
+    fn verify_problem2solution() {
+        let results = solution::find_valid_equations_concat(INPUT);
+        assert_that!(results, eq(11387));
+    }
 }

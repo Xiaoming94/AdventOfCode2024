@@ -24,30 +24,37 @@ fn create_equation(line: &str) -> Equation {
     }
 }
 
-fn try_evaluate(expression: Equation) -> Evaluation {
-    let (lhs, mut rhs_ops) = expression;
-    fn try_evaluate_(lhs: RhsType, current_val: RhsType, mut operands: Operands) -> Evaluation {
-        if operands.is_empty() {
-            return if current_val == lhs {
-                Evaluation::Valid
-            } else {
-                Evaluation::Invalid
-            };
-        }
-
-        let operand = operands.pop_front().unwrap();
-        if lhs == current_val + operand || lhs == current_val * operand {
+fn try_evaluate_(
+    lhs: RhsType,
+    current_val: RhsType,
+    mut operands: Operands,
+    use_concat: bool,
+) -> Evaluation {
+    if operands.is_empty() {
+        return if current_val == lhs {
             Evaluation::Valid
-        } else if try_evaluate_(lhs, current_val * operand, operands.clone()) == Evaluation::Invalid
-        {
-            try_evaluate_(lhs, current_val + operand, operands.clone())
         } else {
-            Evaluation::Valid
-        }
+            Evaluation::Invalid
+        };
     }
 
+    let operand = operands.pop_front().unwrap();
+    if lhs == current_val + operand || lhs == current_val * operand {
+        Evaluation::Valid
+    } else if try_evaluate_(lhs, current_val * operand, operands.clone(), use_concat)
+        == Evaluation::Invalid
+    {
+        try_evaluate_(lhs, current_val + operand, operands.clone(), use_concat)
+    } else {
+        Evaluation::Valid
+    }
+}
+
+fn try_evaluate(expression: Equation) -> Evaluation {
+    let (lhs, mut rhs_ops) = expression;
+
     let first_op = rhs_ops.pop_front().expect("getting first operand");
-    return try_evaluate_(lhs, first_op, rhs_ops.clone());
+    return try_evaluate_(lhs, first_op, rhs_ops.clone(), false);
 }
 
 pub(crate) fn find_valid_equations(input: &str) -> RhsType {
@@ -60,6 +67,11 @@ pub(crate) fn find_valid_equations(input: &str) -> RhsType {
             result == Evaluation::Valid
         })
         .fold(0, move |acc, (lhs, _)| acc + lhs)
+}
+
+pub(crate) fn find_valid_equations_concat(input: &str) -> RhsType {
+    let equations: Vec<Equation> = input.lines().map(create_equation).collect();
+    0
 }
 
 #[cfg(test)]
