@@ -1,7 +1,14 @@
 mod solution;
 
+use inputreader;
+
 fn main() {
-    println!("Hello, world!");
+    let input = inputreader::read_input();
+    println!("The input is :\n{}", input);
+    println!(
+        "Solution for problem1: {}",
+        solution::find_valid_equations(input.as_str())
+    );
 }
 
 #[cfg(test)]
