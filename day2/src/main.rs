@@ -1,15 +1,8 @@
 mod solutions;
 
-use std::io::{self, BufRead};
-
+use inputreader::read_input;
 fn main() {
-    let stdin = io::stdin();
-    let input = stdin
-        .lock()
-        .lines()
-        .fold("".to_string(), move |input, line| {
-            input + line.unwrap().as_str() + "\n"
-        });
+    let input = read_input();
     println!("input is: {input}");
     println!(
         "Result problem1: {}",
