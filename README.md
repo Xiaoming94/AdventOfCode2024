@@ -13,6 +13,8 @@ Each day is solved using a randomized programming lanugages among one of followi
 * C#
 * Java
 * Kotlin
+* Erlang
+* Elixir
 
 ## Progress so far:
 | Day  | language |
