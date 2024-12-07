@@ -25,3 +25,4 @@ Each day is solved using a randomized programming lanugages among one of followi
 | 4    | python   |
 | 5    | C++      |
 | 6    | ruby     |
+| 7    | rust     |
