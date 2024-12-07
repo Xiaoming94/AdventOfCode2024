@@ -16,15 +16,7 @@ module Solution
 
     def initialize(gamemap_string)
       @map = GameMap.new(gamemap_string)
-      starting_pos = Pos.new(0, 0)
-      @map.map.each do |(pos, symb)|
-        next unless symb == :x
-
-        puts "Pos is: #{pos}"
-        starting_pos = pos.dup
-        break
-      end
-      @guard = Guard.new(@map.map.clone, starting_pos)
+      @guard = Guard.new(@map.map.clone, @map.find_guard_starting_pos)
     end
 
     def next_step
@@ -106,6 +98,15 @@ module Solution
         @map.merge!({ current_pos => :dot }) if c == '.'
         @map.merge!({ current_pos => :x }) if c == '^'
       end
+    end
+
+    def find_guard_starting_pos
+      @map.each do |(pos, symb)|
+        next unless symb == :x
+
+        return pos
+      end
+      Pos.new(0, 0)
     end
   end
 
