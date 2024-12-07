@@ -1,8 +1,9 @@
 module Solution
+  Pos = Struct.new(:x, :y)
   class RicochetGuardGame
     def initialize(gamemap_string)
       @nextdirection = { up: :right, right: :down, down: :left, left: :up }
-      @playerpos = [0, 0]
+      @playerpos = Pos.new(0, 0)
       @gamemap = {}
       @playerdir = :up
 
@@ -14,7 +15,7 @@ module Solution
 
     def parse_line(line, y_pos)
       (0...line.length).zip(line.split('')).each do |x_pos, c|
-        current_pos = [x_pos, y_pos]
+        current_pos = Pos.new(x_pos, y_pos)
         @gamemap.merge!({ current_pos => :box }) if c == '#'
         @gamemap.merge!({ current_pos => :dot }) if c == '.'
         if c == '^'
@@ -25,7 +26,7 @@ module Solution
     end
 
     def next_step
-      (current_x, current_y) = @playerpos
+      (current_x, current_y) = @playerpos.to_a
       next_pos = get_next_pos(current_x, current_y)
       @gamemap[next_pos] = :x
       @playerpos = next_pos
@@ -34,18 +35,18 @@ module Solution
     def get_next_pos(current_x, current_y)
       case @playerdir
       when :up
-        [current_x, current_y - 1]
+        Pos.new(current_x, current_y - 1)
       when :down
-        [current_x, current_y + 1]
+        Pos.new(current_x, current_y + 1)
       when :left
-        [current_x - 1, current_y]
+        Pos.new(current_x - 1, current_y)
       when :right
-        [current_x + 1, current_y]
+        Pos.new(current_x + 1, current_y)
       end
     end
 
-    def check_next_step
-      (current_x, current_y) = @playerpos
+    def check_game_state
+      (current_x, current_y) = @playerpos.to_a
       next_step = get_next_pos(current_x, current_y)
       if @gamemap.key?(next_step) == false
         :finished
@@ -55,7 +56,7 @@ module Solution
       end
     end
 
-    def calc_xs
+    def game_steps
       count = 0
       @gamemap.each_value { |s| count += 1 if s == :x }
       count
@@ -64,8 +65,8 @@ module Solution
 
   def count_guard_steps(input)
     game = RicochetGuardGame.new(input)
-    game.next_step while game.check_next_step == :unfinished
-    game.calc_xs
+    game.next_step while game.check_game_state == :unfinished
+    game.game_steps
   end
 
   def find_possible_cycles(input)
