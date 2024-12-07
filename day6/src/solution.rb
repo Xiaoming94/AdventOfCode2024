@@ -36,7 +36,7 @@ module Solution
   end
 
   class Guard
-    attr_accessor(:map, :finishstate)
+    attr_accessor(:map)
 
     def initialize(map, starting_pos)
       @map = map
@@ -47,45 +47,30 @@ module Solution
     def reset_guard
       @current_pos = @starting_pos.clone
       @guard_dir = :up
-      @steps = 0
       @boxes = {}
     end
 
     def check_next_step
       (current_x, current_y) = @current_pos.to_a
       next_step = next_pos(current_x, current_y)
-      if @map.key?(next_step) == false
-        :finished
-      elsif @map[next_step] == :box
+      return :finished if @map.key?(next_step) == false
+
+      while @map[next_step] == :box
+        return :cycle if check_cycle(next_step)
+
         @guard_dir = Solution.nextdirection(@guard_dir)
-        check_cycle(next_step)
-      else
-        :unfinished
+        next_step = next_pos(current_x, current_y)
       end
+      :unfinished
     end
 
     def check_cycle(box_pos)
-      if @boxes.key?(box_pos)
-        steps_at_box = @boxes[box_pos]
-        if cyclic(steps_at_box)
-          :cycle
-        else
-          steps_at_box.push(@steps)
-          @boxes[box_pos] = steps_at_box
-          :unfinished
-        end
+      if @boxes.key?(box_pos) && @boxes[box_pos] == @guard_dir
+        true
       else
-        @boxes.merge!({ box_pos => [@steps] })
-        :unfinished
+        @boxes[box_pos] = @guard_dir
+        false
       end
-    end
-
-    def cyclic(steps_at_box)
-      return false if steps_at_box.length < 2
-
-      (second_last, last) = steps_at_box.last(2)
-      diff_current = @steps - last
-      diff_current == last - second_last
     end
 
     def walk_forward
@@ -93,7 +78,6 @@ module Solution
       next_pos = next_pos(current_x, current_y)
       @map[next_pos] = :x
       @current_pos = next_pos
-      @steps += 1
     end
 
     def calc_guard_patrol_area
@@ -162,6 +146,8 @@ module Solution
     game = RicochetGuardGame.new(input)
     possible_box = 0
     game.map.map.each_key do |pos|
+      next if game.map.map[pos] == :box || game.map.map[pos] == :x
+
       game.reset_with_map(game.map.with_new_box_at(pos))
       game_state = :unfinished
       while game_state == :unfinished
@@ -170,7 +156,6 @@ module Solution
       end
       possible_box += 1 if game_state == :cycle
     end
-
     possible_box
   end
 
