@@ -1,5 +1,8 @@
+#include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <cstdint>
+#include <iostream>
 #include <sstream>
 #include <string>
 #include <unordered_map>
@@ -16,9 +19,21 @@ namespace
     int32_t xPos;
     int32_t yPos;
 
-    auto operator==(const Pos& other) const -> bool
+    inline auto operator==(const Pos& other) const -> bool
     {
       return xPos == other.xPos && yPos == other.yPos;
+    }
+
+    inline auto operator+(const Pos& other) const -> Pos
+    {
+      return Pos {.xPos = (this->xPos + other.xPos),
+                  .yPos = (this->yPos + other.xPos)};
+    }
+
+    inline auto operator-(const Pos& other) const -> Pos
+    {
+      return Pos {.xPos = (this->xPos - other.xPos),
+                  .yPos = (this->yPos - other.yPos)};
     }
   };
 
@@ -45,6 +60,7 @@ namespace
 
 using Positions_t = std::vector<Pos>;
 using AntennaPositions_t = std::unordered_map<char, Positions_t>;
+using Line_t = std::vector<Pos>;
 
 namespace
 {
@@ -86,6 +102,56 @@ namespace
         .yPos = yDistance,
     };
   }
+
+  auto findGCD(const int32_t lastReminder, const int32_t currentVal) -> int32_t
+  {
+    if (lastReminder > currentVal) {
+      return findGCD(currentVal, lastReminder);
+    } else if (lastReminder == 0) {
+      return currentVal;
+    } else {
+      return findGCD(currentVal % lastReminder, lastReminder);
+    }
+  }
+
+  auto gradientOf(const Pos& pos) -> Pos
+  {
+    const auto& [x, y] = pos;
+    const auto gcd = findGCD(std::abs(x), std::abs(y));
+    return Pos {.xPos = (x / gcd), .yPos = (y / gcd)};
+  }
+
+  auto findLineStartingPoint(Pos referencePoint,
+                             const Pos& gradient,
+                             const auto& boundChecker) -> Pos
+  {
+    while (boundChecker.withinBounds(referencePoint - gradient)) {
+      referencePoint = referencePoint - gradient;
+    }
+
+    return referencePoint;
+  }
+
+  auto intersectingPoints(const Pos& pos1,
+                          const Pos& pos2,
+                          const auto& boundChecker) -> Line_t
+  {
+    const auto gradient = gradientOf(calcDistance(pos1, pos2));
+    const auto startingPoint =
+        findLineStartingPoint(pos1, gradient, boundChecker);
+
+    Line_t lineIntersection = {};
+    auto currentPos = std::move(startingPoint);
+    while (boundChecker.withinBounds(currentPos)) {
+      const auto& [x, y] = currentPos;
+      std::cout << "current position: ( x: " << x << ", y: " << y << " )\n";
+      lineIntersection.push_back(currentPos);
+      currentPos = currentPos + gradient;
+    }
+
+    return lineIntersection;
+  }
+
 }  // namespace
 
 namespace std
@@ -107,7 +173,7 @@ namespace solution
 {
   auto solveProblem1(const std::string& input) -> uint32_t
   {
-    const auto& [boundChecker, antennaPosData] = createSolutionModel(input);
+    const auto [boundChecker, antennaPosData] = createSolutionModel(input);
     std::unordered_set<Pos> uniqueAntiNodes;
 
     for (const auto& [_, positions] : antennaPosData) {
@@ -129,6 +195,33 @@ namespace solution
         }
       }
     }
+
+    return uniqueAntiNodes.size();
+  }
+
+  auto solveProblem2(const std::string& input) -> uint32_t
+  {
+    const auto [boundChecker, antennaPosData] = createSolutionModel(input);
+    std::unordered_set<Pos> uniqueAntiNodes;
+    for (const auto& [_, positions] : antennaPosData) {
+      for (auto i = 0u; i < positions.size(); i += 1) {
+        const auto pos1 = positions[i];
+        for (auto j {i + 1}; j < positions.size(); j += 1) {
+          const auto pos2 = positions[j];
+          const auto coordinatesOnLine =
+              intersectingPoints(pos1, pos2, boundChecker);
+          uniqueAntiNodes.insert(coordinatesOnLine.begin(),
+                                 coordinatesOnLine.end());
+        }
+      }
+    }
+
+    std::cout << "Found following antinodes:\n";
+    std::for_each(
+        uniqueAntiNodes.begin(),
+        uniqueAntiNodes.end(),
+        [](const auto& pos)
+        { std::cout << "( x: " << pos.xPos << ",y: " << pos.yPos << ")\n"; });
 
     return uniqueAntiNodes.size();
   }
