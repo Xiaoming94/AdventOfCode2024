@@ -1,6 +1,5 @@
 #include <cmath>
 #include <cstdint>
-#include <iostream>
 #include <sstream>
 #include <string>
 #include <unordered_map>
@@ -30,15 +29,11 @@ namespace
         : m_width(width)
         , m_height(height)
     {
-      std::cout << "Creating BoundChecker with bouds: [ w: " << width
-                << ", h: " << height << " ]\n";
     }
 
     auto withinBounds(const Pos& pos) const -> bool
     {
       const auto& [xPos, yPos] = pos;
-      std::cout << "checking Bounds for: (x : " << xPos << ", y : " << yPos
-                << ")\n";
       return (xPos >= 0 and yPos >= 0) and (xPos < m_width and yPos < m_height);
     }
 
@@ -133,11 +128,6 @@ namespace solution
           }
         }
       }
-    }
-
-    for (const auto& p : uniqueAntiNodes) {
-      std::cout << "AntiNodes at:\n";
-      std::cout << "( x: " << p.xPos << ", y: " << p.yPos << " )\n";
     }
 
     return uniqueAntiNodes.size();
