@@ -118,7 +118,7 @@ namespace solution
     for (const auto& [_, positions] : antennaPosData) {
       for (auto i = 0u; i < positions.size(); i += 1) {
         const auto pos1 = positions[i];
-        for (auto j = i; j < positions.size(); j += 1) {
+        for (auto j {i + 1}; j < positions.size(); j += 1) {
           const auto pos2 = positions[j];
           const auto& [dx, dy] = calcDistance(pos1, pos2);
           const auto& [x1, y1] = pos1;
